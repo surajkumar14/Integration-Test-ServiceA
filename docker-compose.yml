@@ -1,0 +1,36 @@
+
+
+services:
+  service_a:
+    build: .
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    depends_on:
+      - sqldb
+      - aerospike 
+    environment:
+      - DB_HOST=sqldb
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=example
+      - DB_NAME=testdb
+      - AEROSPIKE_HOST=aerospike
+      - AEROSPIKE_PORT=3000
+  sqldb:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: testdb  
+
+  aerospike:
+    image: aerospike/aerospike-server
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "3002:3002"
+      - "3003:3003"
+    environment:
+      - NAMESPACE=test
